@@ -9,10 +9,10 @@ package cr.ac.una.model;
  * @author moral
  */
 public class Usuario {
-    int carnet;
-    String carrera;
-    String estado;
-    String nombre;
+    private int carnet;
+    private String carrera;
+    private String estado;
+    private String nombre;
     
     public Usuario(){}
     public Usuario(int carnet, String carrera, String estado, String nombre){

@@ -9,5 +9,6 @@ package cr.ac.una.model;
  * @author moral
  */
 public enum CondicionDevolucion {
-    
+    BUENA,
+    DAÑADA
 }

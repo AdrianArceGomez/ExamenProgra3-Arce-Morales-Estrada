@@ -10,13 +10,13 @@ package cr.ac.una.model;
  */
 
 public class Herramienta {
-    int codigo;
-    String estado;
-    String nombre;
-    String tipo;
+    private int codigo;
+    private CondicionHerramienta estado;
+    private String nombre;
+    private String tipo;
     
     public Herramienta(){}
-    public Herramienta(int codigo, String estado, String nombre, String tipo){
+    public Herramienta(int codigo, CondicionHerramienta estado, String nombre, String tipo){
         this.codigo = codigo;
         this.estado = estado;
         this.nombre = nombre;
@@ -29,10 +29,10 @@ public class Herramienta {
     public void setCodigo(int codigo){
         this.codigo = codigo;
     }
-    public String getEstado(){
+    public CondicionHerramienta getEstado(){
         return estado;
     }
-    public void setEstado(String estado){
+    public void setEstado(CondicionHerramienta estado){
         this.estado = estado;
     }
     public String getNombre(){

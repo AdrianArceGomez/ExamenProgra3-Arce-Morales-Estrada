@@ -9,5 +9,7 @@ package cr.ac.una.model;
  * @author moral
  */
 public enum CondicionHerramienta {
-    
+    DISPONIBLE,
+    ASIGNADA,
+    DAÑADA
 }
