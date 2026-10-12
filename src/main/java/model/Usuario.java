@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Objects;
+
 /**
  *
  * @author User
@@ -12,12 +14,16 @@ public class Usuario {
     public int Carnet;
     public String Nombre;
     public String Carrera;
-    public Boolean Estado = true;
+    public String Estado;
 
-    public Usuario(int Carnet, String Nombre, String Carrera) {
+    public Usuario(int Carnet, String Nombre, String Carrera, String Estado) {
+        if(Carnet <= 0){
+        throw new IllegalArgumentException("El Carnet debe tener 9 o 10 Digitos");
+    }
         this.Carnet = Carnet;
         this.Nombre = Nombre;
         this.Carrera = Carrera;
+        this.Estado = Estado;
     }
 
     public int getCarnet() {
@@ -31,26 +37,39 @@ public class Usuario {
     public String getCarrera() {
         return Carrera;
     }
-
-    public Boolean getEstado() {
+    
+    public String getEstado(){
         return Estado;
     }
 
-    public void setCarnet(int Carnet) {
-        this.Carnet = Carnet;
-    }
-
     public void setNombre(String Nombre) {
+        Objects.requireNonNull(Nombre, "El nombre es Obligatorio");
+        if(Nombre.isBlank()||Nombre.length() > 30){
+           
+        }
         this.Nombre = Nombre;
     }
 
     public void setCarrera(String Carrera) {
+        Objects.requireNonNull(Carrera, "La Carrera es obligatoria");
+        if(Carrera.isBlank()||Carrera.length() > 20){
+            
+        }
         this.Carrera = Carrera;
     }
-
-    public void setEstado(Boolean Estado) {
+    
+    public void setEstado(String Estado){
+        Objects.requireNonNull(Estado, "EL esrado se debe rellenar");
+        if(Estado.isBlank() || Estado.length() > 20){
+            
+        }
         this.Estado = Estado;
     }
+   
+
+   public String toString(){
+       return "Usuario{Carnet=" + Carnet + ",Nombre=" + Nombre + ",Carrera=" + Carrera + "}";
+   }
     
     
     

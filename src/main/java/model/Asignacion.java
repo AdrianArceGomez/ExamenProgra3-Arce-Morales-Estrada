@@ -4,7 +4,8 @@
  */
 package model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -12,80 +13,54 @@ import java.util.Date;
  */
 public class Asignacion {
     
-    public int Id;
-    public String Estudiante;
-    public String Herramienta;
-    public Date Horaasignacion;
-    public Date Horadevolucion;
-    public String Condiciondevolucion;
-    public String Observacion;
+    private int id;                       
+    private final int usuarioId;          
+    private final int herramientaId;      
+    private final LocalDateTime horasolicitud;
+    private LocalDateTime horadevolucion; 
+    private CondicionDevolucion condicionDevolucion; 
 
-    public Asignacion(int Id, String Estudiante, String Herramienta, Date Horaasignacion, Date Horadevolucion, String Condiciondevolucion, String Observacion) {
-        this.Id = Id;
-        this.Estudiante = Estudiante;
-        this.Herramienta = Herramienta;
-        this.Horaasignacion = Horaasignacion;
-        this.Horadevolucion = Horadevolucion;
-        this.Condiciondevolucion = Condiciondevolucion;
-        this.Observacion = Observacion;
+    /** Para una asignacion nueva (todavia sin id ni devolucion). */
+    public Asignacion(int usuarioId, int herramientaId, LocalDateTime horasolicitud) {
+        this(0, usuarioId, herramientaId, horasolicitud, null, null);
     }
 
-    public int getId() {
-        return Id;
+    /** Para reconstruir una asignacion leida de la base de datos. */
+    public Asignacion(int id, int usuarioId, int herramientaId, LocalDateTime horasolicitud,
+                        LocalDateTime horadevolucion, CondicionDevolucion condicionDevolucion) {
+        if (usuarioId <= 0) {
+            throw new IllegalArgumentException("El usuario es obligatorio");
+        }
+        if (herramientaId <= 0) {
+            throw new IllegalArgumentException("La herramienta es obligatoria");
+        }
+        this.id = id;
+        this.usuarioId = usuarioId;
+        this.herramientaId = herramientaId;
+        this.horasolicitud = Objects.requireNonNull(horasolicitud, "La hora de solicitud es obligatoria");
+        this.horadevolucion = horadevolucion;
+        this.condicionDevolucion = condicionDevolucion;
     }
 
-    public String getEstudiante() {
-        return Estudiante;
+    public int getId() { return id; }
+    public int getUsuarioId() { return usuarioId; }
+    public int getHerramientaId() { return herramientaId; }
+    public LocalDateTime getHorasolicitud() { return horasolicitud; }
+    public LocalDateTime getHoradevolucion() { return horadevolucion; }
+    public CondicionDevolucion getCondicionDevolucion() { return condicionDevolucion; }
+
+    /** Lo usa el repositorio despues de insertar, con el id que genero MySQL. */
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getHerramienta() {
-        return Herramienta;
+    /** Registra la devolucion de la herramienta. */
+    public void devolver(LocalDateTime horadevolucion, CondicionDevolucion condicion) {
+        this.horadevolucion = Objects.requireNonNull(horadevolucion, "La hora de devolucion se debe rellenar");
+        this.condicionDevolucion = Objects.requireNonNull(condicion, "La condicion en la devolucion se debe mencionar");
     }
 
-    public Date getHoraasignacion() {
-        return Horaasignacion;
+    public boolean estaActiva() {
+        return horadevolucion == null;
     }
-
-    public Date getHoradevolucion() {
-        return Horadevolucion;
-    }
-
-    public String getCondiciondevolucion() {
-        return Condiciondevolucion;
-    }
-
-    public String getObservacion() {
-        return Observacion;
-    }
-
-    public void setId(int Id) {
-        this.Id = Id;
-    }
-
-    public void setEstudiante(String Estudiante) {
-        this.Estudiante = Estudiante;
-    }
-
-    public void setHerramienta(String Herramienta) {
-        this.Herramienta = Herramienta;
-    }
-
-    public void setHoraasignacion(Date Horaasignacion) {
-        this.Horaasignacion = Horaasignacion;
-    }
-
-    public void setHoradevolucion(Date Horadevolucion) {
-        this.Horadevolucion = Horadevolucion;
-    }
-
-    public void setCondiciondevolucion(String Condiciondevolucion) {
-        this.Condiciondevolucion = Condiciondevolucion;
-    }
-
-    public void setObservacion(String Observacion) {
-        this.Observacion = Observacion;
-    }
-    
-    
-    
 }

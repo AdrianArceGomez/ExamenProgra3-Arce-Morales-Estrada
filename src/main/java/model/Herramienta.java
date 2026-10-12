@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Objects;
+
 /**
  *
  * @author User
@@ -13,19 +15,23 @@ public class Herramienta {
     public int Codigo;
     public String Nombre;
     public String Tipo;
-    public String Estado;
+    public String EstadoHerrramienta;
 
-    public Herramienta(int Codigo, String Nombre, String Tipo, String Estado) {
+    public Herramienta(int Codigo, String Nombre, String Tipo, String EstadoHerramienta) {
+        if(Codigo <= 0){
+            throw new IllegalArgumentException(" EL codigo no puede ser un numero negativo negativo");
+        }
         this.Codigo = Codigo;
         this.Nombre = Nombre;
         this.Tipo = Tipo;
-        this.Estado = Estado;
+        this.EstadoHerrramienta = EstadoHerramienta;
     }
 
     public int getCodigo() {
         return Codigo;
     }
 
+   
     public String getNombre() {
         return Nombre;
     }
@@ -34,24 +40,37 @@ public class Herramienta {
         return Tipo;
     }
 
-    public String getEstado() {
-        return Estado;
+    public String getEstadoHerrramienta() {
+        return EstadoHerrramienta;
     }
-
-    public void setCodigo(int Codigo) {
-        this.Codigo = Codigo;
-    }
-
+    
+    
+   
     public void setNombre(String Nombre) {
+        Objects.requireNonNull(Nombre, "EL nombre es obligatorio");
+        if(Nombre.isBlank()||Nombre.length() > 20){
+            
+        }
         this.Nombre = Nombre;
     }
 
     public void setTipo(String Tipo) {
+        Objects.requireNonNull(Tipo, "El tipo es obligatorio");
+        if(Tipo.isBlank()|| Tipo.length() > 20){
+            
+        }
         this.Tipo = Tipo;
     }
 
-    public void setEstado(String Estado) {
-        this.Estado = Estado;
+    public void setEstadoHerrramienta(String EstadoHerrramienta) {
+        
+        this.EstadoHerrramienta = Objects.requireNonNull(EstadoHerrramienta, "El estado de la herramienta es necesario");
+    }
+    
+    
+    public String toString(){
+        
+       return "Herramienta{Codigo=" + Codigo + ", Nombre=" + Nombre + ",Tipo=" + Tipo + "}";
     }
     
     
