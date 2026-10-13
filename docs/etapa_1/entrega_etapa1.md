@@ -94,10 +94,11 @@ Archivo: `docs/etapa_1/diagramas/UML_Examen.PDF
 
 ## 9.7 Modelo relacional
 
+https://lucid.app/lucidchart/7f89ef08-49b1-4ffd-804f-d6463a6f83a9/edit?invitationId=inv_583cd9c7-9380-48ed-b2a6-cd49cd6a0805
 Archivo: `docs/etapa_1/diagramas/Modelo_Relacional.pdf`)
 
 ![Modelo relacional](diagramas/Modelo_Relacional.pdf)
-
+https://lucid.app/lucidchart/4d1f1a12-0e94-41ad-a888-2a1ceab7cd53/edit?invitationId=inv_1e527c03-383e-45d1-b863-153220f13eeb
 Script preliminar: (../../database/gamabasis_ex1p3g4.sql)
 
 ## 9.8 Arquitectura propuesta
