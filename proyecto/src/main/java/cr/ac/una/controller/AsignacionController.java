@@ -4,8 +4,12 @@
  */
 package cr.ac.una.controller;
 
+import cr.ac.una.exception.ValidacionException;
 import cr.ac.una.model.CondicionDevolucion;
 import cr.ac.una.service.AsignacionService;
+import cr.ac.una.model.Asignacion;
+import cr.ac.una.exception.ReglaNegocioException;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -17,22 +21,24 @@ public class AsignacionController {
     public AsignacionController(AsignacionService asignacionService) {
         this.asignacionService = asignacionService;
     }
-    public void postAsignar(int carnet, int codigoHerramienta) {
-        if (carnet <= 0) {
-            System.out.println("Error el carnet digitado debe ser mayor a cero.");
-            return;
-        }
-        if (codigoHerramienta <= 0) {
-            System.out.println("Error el código de herramienta digitado debe ser mayor a cero.");
+    //Registra el prestamo al estudiante de carnet , con la herramienta
+    public void postAsignar(int carnet, int codigoHerramienta) throws Exception{
+        if (carnet <= 0 ||codigoHerramienta <= 0) {
+            System.out.println("Error el carnet o el codigo de herramienta digitado debe ser mayor a cero.");
             return;
         }        
         try {
-            asignacionService.asignarHerramienta(carnet, codigoHerramienta);
+            
+            asignacionService.registrarPrestamo(carnet, codigoHerramienta);
             System.out.println("Herramienta (" + codigoHerramienta + ") asignada correctamente al carnet " + carnet + ".");
+            
+        } catch (ReglaNegocioException | ValidacionException e) {
+        System.out.println("Regla de negocio violada" + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error no se pudo realizar la asignación: " + e.getMessage());
+        System.out.println("Error del sistema no se pudo procesar: " + e.getMessage());
         }
     }
+    // retorna el equipo 
     public void putDevolver(int codigoHerramienta, String condicion) {
         if (codigoHerramienta <= 0) {
             System.out.println("Error el código de la herramienta debe ser mayor a cero.");
@@ -43,14 +49,18 @@ public class AsignacionController {
             return;
         }        
         try {
+            
             CondicionDevolucion condicionEnum = CondicionDevolucion.valueOf(condicion.toUpperCase().trim());
             
-            asignacionService.devolverHerramienta(codigoHerramienta, condicionEnum);
+            asignacionService.registrarDevolucion(codigoHerramienta, condicionEnum);
             System.out.println("Devolución de la herramienta (" + codigoHerramienta + ") registrada correctamente.");
+            
         } catch (IllegalArgumentException e) {
             System.out.println("Error condición inválida. Debe escribir únicamente 'BUENA' o 'DAÑADA'.");
+        } catch (ReglaNegocioException | ValidacionException e) {
+            System.out.println("Regla de negocio violada: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro no se pudo procesar la devolución: " + e.getMessage());
+            System.out.println("Error del sistema o regla de negocio violada: " + e.getMessage());
         }
-    }    
+    }  
 }

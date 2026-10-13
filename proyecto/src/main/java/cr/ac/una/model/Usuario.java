@@ -4,46 +4,72 @@
  */
 package cr.ac.una.model;
 
+import java.util.Objects;
+
 /**
  *Objeto que contendra los datos de los estudiantes del laboratorio
  * @author moral
  */
 public class Usuario {
-    private int carnet;
-    private String carrera;
-    private String estado;
-    private String nombre;
-    
-    public Usuario(){}
-    public Usuario(int carnet, String carrera, String estado, String nombre){
-        this.carnet = carnet;
-        this.carrera = carrera;
-        this.estado = estado;
-        this.nombre = nombre;
+ public int Carnet;
+    public String Nombre;
+    public String Carrera;
+    public String Estado;
+
+    public Usuario(int Carnet, String Nombre, String Carrera, String Estado) {
+        if(Carnet <= 0){
+        throw new IllegalArgumentException("El Carnet debe tener 9 o 10 Digitos");
+    }
+        this.Carnet = Carnet;
+        this.Nombre = Nombre;
+        this.Carrera = Carrera;
+        this.Estado = Estado;
+    }
+
+    public int getCarnet() {
+        return Carnet;
+    }
+
+    public String getNombre() {
+        return Nombre;
+    }
+
+    public String getCarrera() {
+        return Carrera;
     }
     
-    public int getCarnet(){
-        return carnet;
-    }
-    public void setCarnet(int carnet){
-        this.carnet = carnet;
-    }
-    public String getCarrera(){
-        return carrera;
-    }
-    public void setCarrera(String carrera){
-        this.carrera = carrera;
-    }
     public String getEstado(){
-        return estado;
+        return Estado;
     }
-    public void setEstado(String estado){
-        this.estado = estado;
+
+    public void setNombre(String Nombre) {
+        Objects.requireNonNull(Nombre, "El nombre es Obligatorio");
+        if(Nombre.isBlank()||Nombre.length() > 30){
+           
+        }
+        this.Nombre = Nombre;
     }
-    public String getNombre(){
-        return nombre;
+
+    public void setCarrera(String Carrera) {
+        Objects.requireNonNull(Carrera, "La Carrera es obligatoria");
+        if(Carrera.isBlank()||Carrera.length() > 20){
+            
+        }
+        this.Carrera = Carrera;
     }
-    public void setNombre(String nombre){
-        this.nombre = nombre;
+    
+    public void setEstado(String Estado){
+        Objects.requireNonNull(Estado, "EL esrado se debe rellenar");
+        if(Estado.isBlank() || Estado.length() > 20){
+            
+        }
+        this.Estado = Estado;
     }
+   
+
+   public String toString(){
+       return "Usuario{Carnet=" + Carnet + ",Nombre=" + Nombre + ",Carrera=" + Carrera + "}";
+   }
+    
+    
 }

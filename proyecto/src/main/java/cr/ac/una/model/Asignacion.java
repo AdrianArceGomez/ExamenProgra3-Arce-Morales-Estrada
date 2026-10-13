@@ -5,6 +5,7 @@
 package cr.ac.una.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 /**
@@ -12,57 +13,54 @@ import java.time.LocalDateTime;
  * @author moral
  */
 public class Asignacion {
-    int id;
-    int herramientaId;
-    int usuarioId;
-    LocalDateTime horasolicitud;
-    LocalDateTime horaDevolucion;
-    CondicionDevolucion condicionDevolucion;
-    
-    public Asignacion(){}
-    public Asignacion(int id, int herramientaId, int usuarioId, LocalDateTime horasolicitud, LocalDateTime horaDevolucion, CondicionDevolucion condicionDevolucion ){
-       this.id = id;
-       this.herramientaId = herramientaId;
-       this.usuarioId = usuarioId;
-       this.horasolicitud = horasolicitud;
-       this.horaDevolucion = horaDevolucion;
-       this.condicionDevolucion = condicionDevolucion;
+    private int id;                       
+    private final int usuarioId;          
+    private final int herramientaId;      
+    private final LocalDateTime horasolicitud;
+    private LocalDateTime horadevolucion; 
+    private CondicionDevolucion condicionDevolucion; 
+
+    /** Para una asignacion nueva (todavia sin id ni devolucion). */
+    public Asignacion(int usuarioId, int herramientaId, LocalDateTime horasolicitud) {
+        this(0, usuarioId, herramientaId, horasolicitud, null, null);
     }
-    
-    public int getId(){
-        return id;
+
+    /** Para reconstruir una asignacion leida de la base de datos. */
+    public Asignacion(int id, int usuarioId, int herramientaId, LocalDateTime horasolicitud,
+                        LocalDateTime horadevolucion, CondicionDevolucion condicionDevolucion) {
+        if (usuarioId <= 0) {
+            throw new IllegalArgumentException("El usuario es obligatorio");
+        }
+        if (herramientaId <= 0) {
+            throw new IllegalArgumentException("La herramienta es obligatoria");
+        }
+        this.id = id;
+        this.usuarioId = usuarioId;
+        this.herramientaId = herramientaId;
+        this.horasolicitud = Objects.requireNonNull(horasolicitud, "La hora de solicitud es obligatoria");
+        this.horadevolucion = horadevolucion;
+        this.condicionDevolucion = condicionDevolucion;
     }
-    public void setId(int id){
+
+    public int getId() { return id; }
+    public int getUsuarioId() { return usuarioId; }
+    public int getHerramientaId() { return herramientaId; }
+    public LocalDateTime getHorasolicitud() { return horasolicitud; }
+    public LocalDateTime getHoradevolucion() { return horadevolucion; }
+    public CondicionDevolucion getCondicionDevolucion() { return condicionDevolucion; }
+
+    /** Lo usa el repositorio despues de insertar, con el id que genero MySQL. */
+    public void setId(int id) {
         this.id = id;
     }
-    public int getHerramientaId(){
-        return herramientaId;
+
+    /** Registra la devolucion de la herramienta. */
+    public void devolver(LocalDateTime horadevolucion, CondicionDevolucion condicion) {
+        this.horadevolucion = Objects.requireNonNull(horadevolucion, "La hora de devolucion se debe rellenar");
+        this.condicionDevolucion = Objects.requireNonNull(condicion, "La condicion en la devolucion se debe mencionar");
     }
-    public void setHerramientaId(int herramientaId){
-        this.herramientaId = herramientaId;
-    }
-    public int getUsuarioId(){
-        return usuarioId;
-    }
-    public void setUsuarioId(int usuarioId){
-        this.usuarioId = usuarioId;
-    }
-    public LocalDateTime getHoraSolicitud(){
-        return horasolicitud;
-    }
-    public void setHorasolicitud(LocalDateTime horasolicitud){
-    this.horasolicitud = horasolicitud;
-    }
-    public LocalDateTime getHoraDevolucion(){
-        return horaDevolucion;
-    }
-    public void HoraDevolucion(LocalDateTime horaDevolucion){
-        this.horaDevolucion = horaDevolucion;
-    }
-    public CondicionDevolucion getCondicionDevolucion(){
-        return condicionDevolucion;
-    }
-    public void setCondicionDevolucion(CondicionDevolucion condicionDevolucion){
-        this.condicionDevolucion = condicionDevolucion;
+
+    public boolean estaActiva() {
+        return horadevolucion == null;
     }
 }

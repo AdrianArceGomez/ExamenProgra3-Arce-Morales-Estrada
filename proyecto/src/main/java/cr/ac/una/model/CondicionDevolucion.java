@@ -9,6 +9,18 @@ package cr.ac.una.model;
  * @author moral
  */
 public enum CondicionDevolucion {
-    BUENA,
-    DAÑADA
+    
+    DAÑADO("Dañado"),
+    BUENO("Bueno");
+    private final String Estado;
+
+    private CondicionDevolucion(String Estado) {
+        this.Estado = Estado;
+    }
+
+    public String getEstado() {
+        return Estado;
+    }
+    
+    
 }

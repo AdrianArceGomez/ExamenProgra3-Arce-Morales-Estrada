@@ -18,23 +18,10 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }   
     public void registrarEstudiante(Usuario usuario) {
-        if (usuario == null){
-          System.out.println("Error los datos del estudiante son nulos.");
-          return;
-        }
-        if (usuario.getCarnet() <= 0 ){
-          System.out.println("Error el carnet debe ser un número entero mayor a cero.");  
-        }
-        if (usuario.getNombre() == null || usuario.getNombre().isBlank()) {
-            System.out.println("Error el nombre del estudiante es obligatorio.");
-            return;
-        }
-        if (usuario.getCarrera() == null || usuario.getCarrera().isBlank()) {
-            System.out.println("Error la carrera del estudiante es obligatoria.");
-            return;
-        } 
+
         try {
-            usuarioService.registrarEstudiante(usuario);
+            usuarioService.validarUsuario(usuario);
+            usuarioService.registrarUsuario(usuario);
             System.out.println("Estudiante registrado correctamente.");
         } catch (Exception e) {
             System.out.println("Error no se pudo registrar el estudiante: " + e.getMessage());
@@ -44,7 +31,7 @@ public class UsuarioController {
         if (carnet <= 0 ){
           System.out.println("Error el carnet debe ser un número entero mayor a cero.");  
         }
-        Usuario usuario = usuarioService.consultarEstudiante(carnet);
+        Usuario usuario = usuarioService.consultarUsuario(carnet);
         if (usuario != null) {
             System.out.println("\n--- Datos del Estudiante ---");
             System.out.println("Carnet: " + usuario.getCarnet());
@@ -56,7 +43,7 @@ public class UsuarioController {
         }
     }
     public void listarEstudiantes() {
-        List<Usuario> estudiantes = usuarioService.listarEstudiantes();
+        List<Usuario> estudiantes = usuarioService.listarUsuarios();
         if (estudiantes.isEmpty()) {
             System.out.println("No hay estudiantes registrados.");
             return;
@@ -67,23 +54,10 @@ public class UsuarioController {
         }
     }
     public void actualizarEstudiante(Usuario usuario) {
-        if (usuario == null){
-          System.out.println("Error los datos del estudiante son nulos.");
-          return;
-        }
-        if (usuario.getCarnet() <= 0 ){
-          System.out.println("Error el carnet debe ser un número entero mayor a cero.");  
-        }
-        if (usuario.getNombre() == null || usuario.getNombre().isBlank()) {
-            System.out.println("Error el nombre del estudiante es obligatorio.");
-            return;
-        }
-        if (usuario.getCarrera() == null || usuario.getCarrera().isBlank()) {
-            System.out.println("Error la carrera del estudiante es obligatoria.");
-            return;
-        }        
+       
         try {
-            usuarioService.actualizarEstudiante(usuario);
+            usuarioService.validarUsuario(usuario);
+            usuarioService.actualizarUsuario(usuario);
             System.out.println("Datos del estudiante actualizados.");
         } catch (Exception e) {
             System.out.println("Error no se pudo actualizar: " + e.getMessage());

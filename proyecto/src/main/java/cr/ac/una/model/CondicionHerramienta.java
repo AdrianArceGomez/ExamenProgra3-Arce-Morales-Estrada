@@ -9,7 +9,18 @@ package cr.ac.una.model;
  * @author moral
  */
 public enum CondicionHerramienta {
-    DISPONIBLE,
-    ASIGNADA,
-    DAÑADA
+    DISPONIBLE("Disponible"),
+    ASIGNADA("Asignada"),
+    DAÑADA("Dañada");
+    
+    private final String Estado;
+
+    private CondicionHerramienta(String Estado) {
+        this.Estado = Estado;
+    }
+
+    public String getEstado() {
+        return Estado;
+    }
+    
 }

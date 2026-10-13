@@ -4,47 +4,73 @@
  */
 package cr.ac.una.model;
 
+import java.util.Objects;
+
 /**
  *contendra los datos de las herraminetas como multimetros, etc
  * @author moral
  */
 
 public class Herramienta {
-    private int codigo;
-    private CondicionHerramienta estado;
-    private String nombre;
-    private String tipo;
-    
-    public Herramienta(){}
-    public Herramienta(int codigo, CondicionHerramienta estado, String nombre, String tipo){
-        this.codigo = codigo;
-        this.estado = estado;
-        this.nombre = nombre;
-        this.tipo = tipo;
+    public int Codigo;
+    public String Nombre;
+    public String Tipo;
+    public String EstadoHerrramienta;
+
+    public Herramienta(int Codigo, String Nombre, String Tipo, String EstadoHerramienta) {
+        if(Codigo <= 0){
+            throw new IllegalArgumentException(" EL codigo no puede ser un numero negativo negativo");
+        }
+        this.Codigo = Codigo;
+        this.Nombre = Nombre;
+        this.Tipo = Tipo;
+        this.EstadoHerrramienta = EstadoHerramienta;
+    }
+
+    public int getCodigo() {
+        return Codigo;
+    }
+
+   
+    public String getNombre() {
+        return Nombre;
+    }
+
+    public String getTipo() {
+        return Tipo;
+    }
+
+    public String getEstadoHerrramienta() {
+        return EstadoHerrramienta;
     }
     
-    public int getCodigo(){
-        return codigo;
+    
+   
+    public void setNombre(String Nombre) {
+        Objects.requireNonNull(Nombre, "EL nombre es obligatorio");
+        if(Nombre.isBlank()||Nombre.length() > 20){
+            
+        }
+        this.Nombre = Nombre;
     }
-    public void setCodigo(int codigo){
-        this.codigo = codigo;
+
+    public void setTipo(String Tipo) {
+        Objects.requireNonNull(Tipo, "El tipo es obligatorio");
+        if(Tipo.isBlank()|| Tipo.length() > 20){
+            
+        }
+        this.Tipo = Tipo;
     }
-    public CondicionHerramienta getEstado(){
-        return estado;
+
+    public void setEstadoHerrramienta(String EstadoHerrramienta) {
+        
+        this.EstadoHerrramienta = Objects.requireNonNull(EstadoHerrramienta, "El estado de la herramienta es necesario");
     }
-    public void setEstado(CondicionHerramienta estado){
-        this.estado = estado;
+    
+    
+    public String toString(){
+        
+       return "Herramienta{Codigo=" + Codigo + ", Nombre=" + Nombre + ",Tipo=" + Tipo + "}";
     }
-    public String getNombre(){
-        return nombre;
-    }
-    public void setNombre(String nombre){
-        this.nombre = nombre;
-    }
-    public String getTipo(){
-        return tipo;
-    }
-    public void setTipo(String tipo){
-        this.tipo = tipo;
-    }
+    
 }
