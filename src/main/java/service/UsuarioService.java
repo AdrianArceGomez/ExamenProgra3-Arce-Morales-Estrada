@@ -5,7 +5,9 @@
 package service;
 
 import exception.ValidacionException;
+import java.util.Objects;
 import model.Usuario;
+import repository.UsuarioRepository;
 
 /**
  *
@@ -13,6 +15,13 @@ import model.Usuario;
  */
 public class UsuarioService {
     
+    private final UsuarioRepository usuarioRepository;
+
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = Objects.requireNonNull(
+            usuarioRepository,
+            "El repositorio de usuarios es obligatorio");
+        }
     public void validarUsuario(Usuario usuario)
             throws ValidacionException {
 

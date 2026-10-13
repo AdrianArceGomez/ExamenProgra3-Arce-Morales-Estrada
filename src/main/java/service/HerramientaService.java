@@ -5,14 +5,23 @@
 package service;
 
 import exception.ValidacionException;
+import java.util.Objects;
 import model.Herramienta;
+import repository.HerramientaRepository;
+import model.CondicionHerramienta;
 
 /**
  *
  * @author tadan
  */
 public class HerramientaService {
-    
+    private final HerramientaRepository herramientaRepository;
+
+public HerramientaService(HerramientaRepository herramientaRepository) {
+    this.herramientaRepository = Objects.requireNonNull(
+            herramientaRepository,
+            "El repositorio de herramientas es obligatorio");
+}
     public void validarHerramienta(Herramienta herramienta)
             throws ValidacionException {
 
@@ -32,27 +41,41 @@ public class HerramientaService {
                     "El nombre de la herramienta es obligatorio");
         }
 
+        if (herramienta.getNombre().length() > 20) {
+            throw new ValidacionException(
+                    "El nombre no puede superar los 20 caracteres");
+        }
+
         if (herramienta.getTipo() == null
                 || herramienta.getTipo().trim().isEmpty()) {
             throw new ValidacionException(
                     "El tipo de herramienta es obligatorio");
         }
 
-        if (herramienta.getEstado() == null
-                || herramienta.getEstado().trim().isEmpty()) {
+        if (herramienta.getTipo().length() > 20) {
+            throw new ValidacionException(
+                    "El tipo no puede superar los 20 caracteres");
+        }
+
+        if (herramienta.getEstadoHerrramienta() == null
+                || herramienta.getEstadoHerrramienta().trim().isEmpty()) {
             throw new ValidacionException(
                     "El estado de la herramienta es obligatorio");
         }
+    String estado = herramienta.getEstadoHerrramienta();
 
-        String estado = herramienta.getEstado().trim();
+    boolean estadoValido = false;
 
-        if (!estado.equals("DISPONIBLE")
-                && !estado.equals("ASIGNADA")
-                && !estado.equals("DANADA")
-                && !estado.equals("EN_MANTENIMIENTO")) {
+    for (CondicionHerramienta condicion : CondicionHerramienta.values()) {
+    if (condicion.getEstado().equals(estado)) {
+        estadoValido = true;
+        break;
+    }
+    }
 
-            throw new ValidacionException(
-                    "El estado de la herramienta no es valido");
-        }
+    if (!estadoValido) {
+    throw new ValidacionException(
+            "El estado de la herramienta no es valido");
+    }
     }
 }
