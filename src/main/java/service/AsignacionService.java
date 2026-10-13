@@ -13,6 +13,7 @@ import repository.HerramientaRepository;
 import repository.UsuarioRepository;
 
 import exception.ReglaNegocioException;
+import model.CondicionDevolucion;
 import model.Usuario;
 import model.Herramienta;
 import model.UsuarioHabilitado;
@@ -133,5 +134,55 @@ public void validarLimiteHerramientas(int carnet)
                 "El usuario ya tiene el maximo de 3 herramientas asignadas");
     }
 }
+
+public Asignacion validarDevolucion(int idAsignacion)
+        throws ReglaNegocioException {
+
+    if (idAsignacion <= 0) {
+        throw new ReglaNegocioException(
+                "El identificador de la asignacion no es valido");
+    }
+
+    Asignacion asignacion = asignacionRepository.findById(idAsignacion)
+            .orElseThrow(() -> new ReglaNegocioException(
+                    "La asignacion no existe"));
+
+    if (!asignacion.estaActiva()) {
+        throw new ReglaNegocioException(
+                "La herramienta ya fue devuelta");
+    }
+
+    return asignacion;
+}
+
+public void aplicarSancionPorDanio(
+        Asignacion asignacion,
+        CondicionDevolucion condicion)
+        throws ReglaNegocioException {
+
+    if (asignacion == null) {
+        throw new ReglaNegocioException(
+                "La asignacion no puede ser nula");
+    }
+
+    if (condicion == null) {
+        throw new ReglaNegocioException(
+                "La condicion de devolucion es obligatoria");
+    }
+
+    if (condicion == CondicionDevolucion.DAÑADO) {
+
+        Usuario usuario = usuarioRepository
+                .findById(asignacion.getUsuarioId())
+                .orElseThrow(() -> new ReglaNegocioException(
+                        "El usuario no existe"));
+
+        usuario.setEstado(
+                UsuarioHabilitado.DESHABILITADO.getTipo());
+
+        usuarioRepository.save(usuario);
+    }
+}
+
   
 }
