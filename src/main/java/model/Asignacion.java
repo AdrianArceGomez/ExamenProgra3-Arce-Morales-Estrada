@@ -14,11 +14,11 @@ import java.util.Objects;
 public class Asignacion {
     
     private int id;                       
-    private final int usuarioId;          
-    private final int herramientaId;      
-    private final LocalDateTime horasolicitud;
-    private LocalDateTime horadevolucion; 
-    private CondicionDevolucion condicionDevolucion; 
+    private final int UsuarioId;          
+    private final int HerramientaId;      
+    private final LocalDateTime Horasolicitud;
+    private LocalDateTime Horadevolucion; 
+    private CondicionDevolucion CondicionDevolucion; 
 
     /** Para una asignacion nueva (todavia sin id ni devolucion). */
     public Asignacion(int usuarioId, int herramientaId, LocalDateTime horasolicitud) {
@@ -35,19 +35,19 @@ public class Asignacion {
             throw new IllegalArgumentException("La herramienta es obligatoria");
         }
         this.id = id;
-        this.usuarioId = usuarioId;
-        this.herramientaId = herramientaId;
-        this.horasolicitud = Objects.requireNonNull(horasolicitud, "La hora de solicitud es obligatoria");
-        this.horadevolucion = horadevolucion;
-        this.condicionDevolucion = condicionDevolucion;
+        this.UsuarioId = usuarioId;
+        this.HerramientaId = herramientaId;
+        this.Horasolicitud = Objects.requireNonNull(horasolicitud, "La hora de solicitud es obligatoria");
+        this.Horadevolucion = horadevolucion;
+        this.CondicionDevolucion = condicionDevolucion;
     }
 
     public int getId() { return id; }
-    public int getUsuarioId() { return usuarioId; }
-    public int getHerramientaId() { return herramientaId; }
-    public LocalDateTime getHorasolicitud() { return horasolicitud; }
-    public LocalDateTime getHoradevolucion() { return horadevolucion; }
-    public CondicionDevolucion getCondicionDevolucion() { return condicionDevolucion; }
+    public int getUsuarioId() { return UsuarioId; }
+    public int getHerramientaId() { return HerramientaId; }
+    public LocalDateTime getHorasolicitud() { return Horasolicitud; }
+    public LocalDateTime getHoradevolucion() { return Horadevolucion; }
+    public CondicionDevolucion getCondicionDevolucion() { return CondicionDevolucion; }
 
     /** Lo usa el repositorio despues de insertar, con el id que genero MySQL. */
     public void setId(int id) {
@@ -56,11 +56,11 @@ public class Asignacion {
 
     /** Registra la devolucion de la herramienta. */
     public void devolver(LocalDateTime horadevolucion, CondicionDevolucion condicion) {
-        this.horadevolucion = Objects.requireNonNull(horadevolucion, "La hora de devolucion se debe rellenar");
-        this.condicionDevolucion = Objects.requireNonNull(condicion, "La condicion en la devolucion se debe mencionar");
+        this.Horadevolucion = Objects.requireNonNull(horadevolucion, "La hora de devolucion se debe rellenar");
+        this.CondicionDevolucion = Objects.requireNonNull(condicion, "La condicion en la devolucion se debe mencionar");
     }
 
     public boolean estaActiva() {
-        return horadevolucion == null;
+        return Horadevolucion == null;
     }
 }

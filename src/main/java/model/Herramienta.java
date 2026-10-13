@@ -15,7 +15,7 @@ public class Herramienta {
     public int Codigo;
     public String Nombre;
     public String Tipo;
-    public String EstadoHerrramienta;
+    public String EstadoHerramienta;
 
     public Herramienta(int Codigo, String Nombre, String Tipo, String EstadoHerramienta) {
         if(Codigo <= 0){
@@ -24,7 +24,7 @@ public class Herramienta {
         this.Codigo = Codigo;
         this.Nombre = Nombre;
         this.Tipo = Tipo;
-        this.EstadoHerrramienta = EstadoHerramienta;
+        this.EstadoHerramienta = EstadoHerramienta;
     }
 
     public int getCodigo() {
@@ -40,8 +40,8 @@ public class Herramienta {
         return Tipo;
     }
 
-    public String getEstadoHerrramienta() {
-        return EstadoHerrramienta;
+    public String getEstadoHerramienta() {
+        return EstadoHerramienta;
     }
     
     
@@ -64,7 +64,7 @@ public class Herramienta {
 
     public void setEstadoHerrramienta(String EstadoHerrramienta) {
         
-        this.EstadoHerrramienta = Objects.requireNonNull(EstadoHerrramienta, "El estado de la herramienta es necesario");
+        this.EstadoHerramienta = Objects.requireNonNull(EstadoHerramienta, "El estado de la herramienta es necesario");
     }
     
     

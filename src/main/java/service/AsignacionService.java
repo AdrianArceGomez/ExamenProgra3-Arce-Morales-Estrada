@@ -6,6 +6,7 @@ package service;
 
 import exception.ValidacionException;
 import model.Asignacion;
+import model.CondicionDevolucion;
 
 /**
  *
@@ -21,33 +22,31 @@ public class AsignacionService {
                     "La asignacion no puede ser nula");
         }
 
-        if (asignacion.getEstudiante() == null
-                || asignacion.getEstudiante().trim().isEmpty()) {
+        if (asignacion.getUsuarioId() == null || asignacion.getUsuarioId().trim().isEmpty()) {
             throw new ValidacionException(
                     "El estudiante es obligatorio");
+        } else {
         }
 
-        if (asignacion.getHerramienta() == null
-                || asignacion.getHerramienta().trim().isEmpty()) {
+        if (asignacion.getHerramientaId() == null || asignacion.getHerramientaId().trim().isEmpty()) {
             throw new ValidacionException(
                     "La herramienta es obligatoria");
+        } else {
         }
 
-        if (asignacion.getHoraasignacion() == null) {
+        if (asignacion.getHorasolicitud() == null) {
             throw new ValidacionException(
                     "La fecha de asignacion es obligatoria");
         }
 
-        if (asignacion.getHoradevolucion() != null
-                && asignacion.getHoradevolucion()
-                        .before(asignacion.getHoraasignacion())) {
+        if (asignacion.getHoradevolucion() != null && asignacion.getHoradevolucion().isBefore(asignacion.getHorasolicitud())) {
             throw new ValidacionException(
                     "La devolucion no puede ser anterior a la asignacion");
         }
 
         if (asignacion.getHoradevolucion() != null) {
 
-            String condicion = asignacion.getCondiciondevolucion();
+            CondicionDevolucion condicion = asignacion.getCondicionDevolucion();
 
             if (condicion == null
                     || (!condicion.equals("BUENA")

@@ -38,13 +38,13 @@ public class HerramientaService {
                     "El tipo de herramienta es obligatorio");
         }
 
-        if (herramienta.getEstado() == null
-                || herramienta.getEstado().trim().isEmpty()) {
+        if (herramienta.getEstadoHerramienta() == null
+                || herramienta.getEstadoHerramienta().trim().isEmpty()) {
             throw new ValidacionException(
                     "El estado de la herramienta es obligatorio");
         }
 
-        String estado = herramienta.getEstado().trim();
+        String estado = herramienta.getEstadoHerramienta().trim();
 
         if (!estado.equals("DISPONIBLE")
                 && !estado.equals("ASIGNADA")
