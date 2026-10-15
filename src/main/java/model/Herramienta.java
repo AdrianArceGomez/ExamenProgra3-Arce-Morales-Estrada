@@ -62,8 +62,8 @@ public class Herramienta {
         this.Tipo = Tipo;
     }
 
-    public void setEstadoHerrramienta(String EstadoHerrramienta) {
-        
+    public void setEstadoHerramienta(String EstadoHerramienta) {
+
         this.EstadoHerramienta = Objects.requireNonNull(EstadoHerramienta, "El estado de la herramienta es necesario");
     }
     

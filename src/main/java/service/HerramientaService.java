@@ -6,22 +6,24 @@ package service;
 
 import exception.ValidacionException;
 import java.util.Objects;
+import model.CondicionHerramienta;
 import model.Herramienta;
 import repository.HerramientaRepository;
-import model.CondicionHerramienta;
 
 /**
  *
  * @author tadan
  */
 public class HerramientaService {
+
     private final HerramientaRepository herramientaRepository;
 
-public HerramientaService(HerramientaRepository herramientaRepository) {
-    this.herramientaRepository = Objects.requireNonNull(
-            herramientaRepository,
-            "El repositorio de herramientas es obligatorio");
-}
+    public HerramientaService(HerramientaRepository herramientaRepository) {
+        this.herramientaRepository = Objects.requireNonNull(
+                herramientaRepository,
+                "El repositorio de herramientas es obligatorio");
+    }
+
     public void validarHerramienta(Herramienta herramienta)
             throws ValidacionException {
 
@@ -52,39 +54,31 @@ public HerramientaService(HerramientaRepository herramientaRepository) {
                     "El tipo de herramienta es obligatorio");
         }
 
-<<<<<<< HEAD
-        if (herramienta.getEstadoHerramienta() == null
-                || herramienta.getEstadoHerramienta().trim().isEmpty()) {
-=======
         if (herramienta.getTipo().length() > 20) {
             throw new ValidacionException(
                     "El tipo no puede superar los 20 caracteres");
         }
 
-        if (herramienta.getEstadoHerrramienta() == null
-                || herramienta.getEstadoHerrramienta().trim().isEmpty()) {
->>>>>>> b4a316df746aff94965f81945ba8e4da7ef20e10
+        if (herramienta.getEstadoHerramienta() == null
+                || herramienta.getEstadoHerramienta().trim().isEmpty()) {
             throw new ValidacionException(
                     "El estado de la herramienta es obligatorio");
         }
-    String estado = herramienta.getEstadoHerrramienta();
 
-<<<<<<< HEAD
         String estado = herramienta.getEstadoHerramienta().trim();
-=======
-    boolean estadoValido = false;
->>>>>>> b4a316df746aff94965f81945ba8e4da7ef20e10
 
-    for (CondicionHerramienta condicion : CondicionHerramienta.values()) {
-    if (condicion.getEstado().equals(estado)) {
-        estadoValido = true;
-        break;
-    }
-    }
+        boolean estadoValido = false;
 
-    if (!estadoValido) {
-    throw new ValidacionException(
-            "El estado de la herramienta no es valido");
-    }
+        for (CondicionHerramienta condicion : CondicionHerramienta.values()) {
+            if (condicion.getEstado().equals(estado)) {
+                estadoValido = true;
+                break;
+            }
+        }
+
+        if (!estadoValido) {
+            throw new ValidacionException(
+                    "El estado de la herramienta no es valido");
+        }
     }
 }
