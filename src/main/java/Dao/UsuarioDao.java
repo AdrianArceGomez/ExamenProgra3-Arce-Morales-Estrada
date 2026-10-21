@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Dao;
-
+ 
 import exception.PersistenciaException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,14 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import model.Usuario;
 import repository.UsuarioRepository;
-
-
-/**
- *
- * @author User
- */
+ 
 public class UsuarioDao implements UsuarioRepository{
-    
     private static final String URL =
             "jdbc:mysql://10.123.0.165:3306/gamabasis_ex1p3g4?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private static final String USUARIO = "gamabasis_ex1p3g4";
@@ -31,7 +25,7 @@ public class UsuarioDao implements UsuarioRepository{
     private Connection conectar() throws SQLException {
         return DriverManager.getConnection(URL, USUARIO, CONTRASENA);
     }
-    
+ 
     @Override
     public void save(Usuario u) {
         String sql = "INSERT INTO Usuario (Carnet, Nombre, Carrera, Estado) VALUES (?, ?, ?, ?) "
@@ -39,13 +33,11 @@ public class UsuarioDao implements UsuarioRepository{
  
         try (Connection con = conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
- 
             ps.setInt(1, u.getCarnet());
             ps.setString(2, u.getNombre());
             ps.setString(3, u.getCarrera());
             ps.setString(4, u.getEstado());
             ps.executeUpdate();
- 
         } catch (SQLException e) {
             throw new PersistenciaException("No se pudo guardar el usuario " + u.getCarnet(), e);
         }
@@ -57,7 +49,6 @@ public class UsuarioDao implements UsuarioRepository{
  
         try (Connection con = conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
- 
             ps.setInt(1, carnet);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -65,7 +56,6 @@ public class UsuarioDao implements UsuarioRepository{
                 }
                 return Optional.empty();
             }
- 
         } catch (SQLException e) {
             throw new PersistenciaException("No se pudo buscar el usuario " + carnet, e);
         }
@@ -79,36 +69,31 @@ public class UsuarioDao implements UsuarioRepository{
         try (Connection con = conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
- 
             while (rs.next()) {
                 usuarios.add(mapear(rs));
             }
             return usuarios;
- 
         } catch (SQLException e) {
             throw new PersistenciaException("No se pudo listar los usuarios", e);
         }
     }
-    
+ 
     @Override
     public int countActiveAsignaciones(int carnet) {
-        String sql = "SELECT COUNT(*) FROM Asignaciones WHERE Usuarioid = ? AND Horadevolucion IS NULL";
+        String sql = "SELECT COUNT(*) FROM Asignaciones WHERE Usuarioid = ? AND CondicionDevolucion = ?";
  
         try (Connection con = conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
- 
             ps.setInt(1, carnet);
+            ps.setString(2, AsignacionesDao.PENDIENTE);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return rs.getInt(1);
             }
- 
         } catch (SQLException e) {
             throw new PersistenciaException("No se pudo contar las asignaciones del usuario " + carnet, e);
         }
     }
- 
-    
  
     private Usuario mapear(ResultSet rs) throws SQLException {
         return new Usuario(

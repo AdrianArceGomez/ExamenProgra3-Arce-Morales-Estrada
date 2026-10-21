@@ -16,8 +16,10 @@ public class Herramienta {
     public String Nombre;
     public String Tipo;
     public String EstadoHerramienta;
+    public int DuracionMaximaHoras;
+    
 
-    public Herramienta(int Codigo, String Nombre, String Tipo, String EstadoHerramienta) {
+    public Herramienta(int Codigo, String Nombre, String Tipo, String EstadoHerramienta, int DuracionMaximaHoras) {
         if(Codigo <= 0){
             throw new IllegalArgumentException(" EL codigo no puede ser un numero negativo negativo");
         }
@@ -25,6 +27,7 @@ public class Herramienta {
         this.Nombre = Nombre;
         this.Tipo = Tipo;
         this.EstadoHerramienta = EstadoHerramienta;
+        this.DuracionMaximaHoras = this.DuracionMaximaHoras;
     }
 
     public int getCodigo() {
@@ -44,11 +47,14 @@ public class Herramienta {
         return EstadoHerramienta;
     }
     
+    public int getDuracionMaximaHoras(){
+        return DuracionMaximaHoras;
+    }
     
    
     public void setNombre(String Nombre) {
         Objects.requireNonNull(Nombre, "EL nombre es obligatorio");
-        if(Nombre.isBlank()||Nombre.length() > 20){
+        if(Nombre.isBlank()||Nombre.length() > 30){
             
         }
         this.Nombre = Nombre;
@@ -66,6 +72,12 @@ public class Herramienta {
 
         this.EstadoHerramienta = Objects.requireNonNull(EstadoHerramienta, "El estado de la herramienta es necesario");
     }
+
+    public void setDuracionMaximaHoras(int DuracionMaximaHoras) {
+        this.DuracionMaximaHoras = DuracionMaximaHoras;
+    }
+    
+    
     
     
     public String toString(){
