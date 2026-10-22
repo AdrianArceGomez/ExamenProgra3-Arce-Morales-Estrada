@@ -4,6 +4,7 @@
  */
 package cr.ac.una.service;
 
+import Dao.UsuarioDao;
 import cr.ac.una.exception.ReglaNegocioException;
 import cr.ac.una.exception.ValidacionException;
 import cr.ac.una.model.Usuario;
@@ -19,6 +20,9 @@ public class UsuarioService {
     //variable para conectar con el repository
     private final UsuarioRepository usuarioRepository;
     //constrctor 
+    public UsuarioService(){
+        this.usuarioRepository = new UsuarioDao();
+    }
     public UsuarioService(UsuarioRepository usuarioRepository){
         this.usuarioRepository = Objects.requireNonNull(usuarioRepository, "El repositorio de usuarios es obligatorio");
     }

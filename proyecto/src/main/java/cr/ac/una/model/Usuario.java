@@ -15,6 +15,10 @@ public class Usuario {
     public String Nombre;
     public String Carrera;
     public String Estado;
+   
+    public Usuario(){
+        
+    }
 
     public Usuario(int Carnet, String Nombre, String Carrera, String Estado) {
         if(Carnet <= 0){
@@ -40,6 +44,13 @@ public class Usuario {
     
     public String getEstado(){
         return Estado;
+    }
+    public void setCarnet(int Carnet){
+        Objects.requireNonNull(Carnet, "El carnet es Obligatorio");
+        if(Carnet <= 0 || Carnet > 99999999){
+         throw new IllegalArgumentException("El carnet debe ser un número entero positivo válido de hasta 9 dígitos.");   
+        }
+        this.Carnet = Carnet;
     }
 
     public void setNombre(String Nombre) {

@@ -19,7 +19,7 @@ public class Asignacion {
     private final LocalDateTime horasolicitud;
     private LocalDateTime horadevolucion; 
     private CondicionDevolucion condicionDevolucion; 
-
+    
     /** Para una asignacion nueva (todavia sin id ni devolucion). */
     public Asignacion(int usuarioId, int herramientaId, LocalDateTime horasolicitud) {
         this(0, usuarioId, herramientaId, horasolicitud, null, null);

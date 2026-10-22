@@ -1,1 +1,10 @@
 /target/
+/proyecto/target/
+
+db.properties
+**/db.properties
+
+.netbeans/
+nbproject/
+nbactions.xml/
+.mtj.tmp/

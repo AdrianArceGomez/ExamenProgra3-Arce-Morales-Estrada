@@ -4,6 +4,7 @@
  */
 package cr.ac.una.service;
 
+import Dao.HerramientaDao;
 import cr.ac.una.exception.ReglaNegocioException;
 import cr.ac.una.exception.ValidacionException;
 import cr.ac.una.model.Herramienta;
@@ -19,6 +20,9 @@ public class HerramientaService {
     //VAriable para conectar la base de datos 
     private final HerramientaRepository herramientaRepository;
     //Constructor 
+    public HerramientaService(){
+        this.herramientaRepository = new HerramientaDao();
+    }
     public HerramientaService(HerramientaRepository herramientaRepository) {
         this.herramientaRepository = Objects.requireNonNull(herramientaRepository, "El repositorio de herramientas es obligatorio");
     }

@@ -16,6 +16,9 @@ import cr.ac.una.model.UsuarioHabilitado;
 import cr.ac.una.repository.AsignacionRepository;
 import cr.ac.una.repository.HerramientaRepository;
 import cr.ac.una.repository.UsuarioRepository;
+import Dao.AsignacionesDao;
+import Dao.HerramientaDao;
+import Dao.UsuarioDao;
 import cr.ac.una.exception.ReglaNegocioException;
 import java.time.LocalDateTime;
 
@@ -26,7 +29,12 @@ public class AsignacionService {
     private final AsignacionRepository asignacionRepository;
     private final HerramientaRepository herramientaRepository;
     private final UsuarioRepository usuarioRepository;
-
+    
+    public AsignacionService(){
+        this.asignacionRepository = new AsignacionesDao();
+        this.herramientaRepository = new HerramientaDao();
+        this.usuarioRepository = new UsuarioDao();
+    }
     public AsignacionService(
             AsignacionRepository asignacionRepository,
             HerramientaRepository herramientaRepository,
@@ -44,6 +52,8 @@ public class AsignacionService {
                 usuarioRepository,
                 "El repositorio de usuarios es obligatorio");
     }
+
+  
     //valida la disponibilidad del prestamo y cambia el estado de la herramienta
     public void registrarPrestamo(int carnet, int codigoHerramienta) throws Exception{
         validarDisponibilidad(carnet, codigoHerramienta);

@@ -17,10 +17,15 @@ import java.time.LocalDateTime;
  */
 public class AsignacionController {
    private final AsignacionService asignacionService;
-   
+    
+   public AsignacionController(){
+       this.asignacionService = new AsignacionService();
+   }
     public AsignacionController(AsignacionService asignacionService) {
         this.asignacionService = asignacionService;
     }
+
+
     //Registra el prestamo al estudiante de carnet , con la herramienta
     public void postAsignar(int carnet, int codigoHerramienta) throws Exception{
         if (carnet <= 0 ||codigoHerramienta <= 0) {

@@ -14,9 +14,13 @@ import java.util.List;
 public class HerramientaController {
     private final HerramientaService herramientaService;
     
+    public HerramientaController(){
+        this.herramientaService = new HerramientaService();
+    }
     public HerramientaController(HerramientaService herramientaService){
         this.herramientaService = herramientaService;
     } 
+
     // verificacion y registro de la herramienta
     public void registrarHerramienta(Herramienta herramienta){
 
