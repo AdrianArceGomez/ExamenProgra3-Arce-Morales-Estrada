@@ -10,8 +10,8 @@ package cr.ac.una.model;
  */
 public enum CondicionDevolucion {
     
-    DAÑADO("Dañado"),
-    BUENO("Bueno");
+    DAÑADA("Dañada"),
+    BUENA("Buena");
     private final String Estado;
 
     private CondicionDevolucion(String Estado) {

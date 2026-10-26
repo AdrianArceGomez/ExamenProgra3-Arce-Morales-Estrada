@@ -13,37 +13,32 @@
 | Se eliminó la tabla `UsuarioHerramienta` de la base de datos. La clase `UsuarioHerramienta` sigue en `model`, pero no se usa. | La relación estudiante–herramienta ya queda registrada en `Asignaciones`, así que la tabla puente era redundante. |
 | Se amplió `Usuario.Nombre` a `varchar(30)` y `Usuario.Estado` a `varchar(20)`. | Admitir nombres completos y el valor `DESHABILITADO`. |
 
-Modelo relacional final (`SQL/gamabasis_ex1p3g4.sql`):
+Modelo relacional final (`database/schema.sql`):
 
 | Tabla | Columnas | Llaves |
 |---|---|---|
-| `Usuario` | `Carnet` int, `Nombre` varchar(30), `Carrera` varchar(20), `Estado` varchar(20) | PK `Carnet` |
-| `Herramienta` | `Codigo` int, `Nombre` varchar(30), `Tipo` varchar(20), `Estado` varchar(20), `DuracionMaximaHoras` int | PK `Codigo` |
-| `Asignaciones` | `Id` int AUTO_INCREMENT, `Usuarioid` int, `Herramientaid` int, `Horasolicitud` datetime, `Horadevolucion` datetime, `CondicionDevolucion` varchar(20) | PK `Id`; FK `Usuarioid → Usuario.Carnet`; FK `Herramientaid → Herramienta.Codigo` |
-
-> El diagrama del modelo relacional de la Etapa 1 todavía muestra `UsuarioHerramienta` y no tiene `CondicionDevolucion` ni `DuracionMaximaHoras`. Hay que actualizarlo.
+| `Usuario` | `Carnet` int, `Nombre` varchar(30), `Carrera` varchar(20), `Estado` varchar(20) | PK `Carnet`; `CHECK (Carnet > 0)`; `CHECK (Estado IN ('HABILITADO','DESHABILITADO'))` |
+| `Herramienta` | `Codigo` int, `Nombre` varchar(30), `Tipo` varchar(20), `Estado` varchar(20), `DuracionMaximaHoras` int | PK `Codigo`; `CHECK (Codigo > 0)`; `CHECK` de estado válido; `CHECK (DuracionMaximaHoras >= 0)` |
+| `Asignaciones` | `Id` int AUTO_INCREMENT, `Usuarioid` int, `Herramientaid` int, `Horasolicitud` datetime, `Horadevolucion` datetime, `CondicionDevolucion` varchar(20) | PK `Id`; FK `Usuarioid → Usuario.Carnet`; FK `Herramientaid → Herramienta.Codigo`; `CHECK` de condición válida; `CHECK (Horadevolucion >= Horasolicitud)` |
 
 ## Configuración y ejecución
 
 ```text
-1. Crear la base de datos y cargar el script:
-       mysql -u root -p -e "CREATE DATABASE gamabasis_ex1p3g4"
-       mysql -u root -p gamabasis_ex1p3g4 < SQL/gamabasis_ex1p3g4.sql
-   (o importar SQL/gamabasis_ex1p3g4.sql desde phpMyAdmin / MySQL Workbench)
+1. Crear la base de datos (borra y crea examen_progra3 con datos de prueba):
+       mysql -u root -p < database/schema.sql
+   (o abrir database/schema.sql en MySQL Workbench y ejecutarlo completo)
 
 2. Configurar la conexión:
        cd proyecto/src/main/resources
        cp db.properties.example db.properties
-   En db.properties, cambiar la base de datos de db.url a gamabasis_ex1p3g4
-   y completar db.usuario y db.clave.
+   En db.properties, completar db.usuario y db.clave del MySQL local.
+   db.url ya apunta a localhost:3306/examen_progra3.
 
 3. Ejecutar:
        cd proyecto
        mvn clean compile exec:java
    Desde NetBeans: abrir la carpeta proyecto/ y ejecutar cr.ac.una.app.App
 ```
-
-> ⚠️ El script que se usa es `SQL/gamabasis_ex1p3g4.sql`, exportado desde phpMyAdmin. La guía pide `database/schema.sql`, que sigue siendo la plantilla vacía, con `DROP/CREATE DATABASE` y datos de prueba. Ver D-09 en [`../etapa_3/mejoras.md`](../etapa_3/mejoras.md).
 
 ## Operaciones implementadas
 
@@ -62,7 +57,7 @@ Modelo relacional final (`SQL/gamabasis_ex1p3g4.sql`):
 | Herramientas asignadas a un estudiante | Consulta con JOIN | — | — | — | `AsignacionRepository.findHerramientasByUsuarioId` |
 | Historial de una herramienta | Consulta con filtro | — | — | — | `AsignacionRepository.findHistorialByHerramientaId` |
 
-> Las dos últimas consultas están implementadas en `AsignacionesDao`, pero todavía no tienen método en el `Service` ni opción en el menú.
+Las dos últimas consultas están implementadas en `AsignacionesDao`.
 
 ## Reglas de negocio implementadas
 
@@ -117,7 +112,7 @@ String sql = "SELECT h.Codigo, h.Nombre, h.Tipo, h.Estado, h.DuracionMaximaHoras
 
 **¿Alguna operación usa transacción?**
 
-Todavía no. Asignar (insertar asignación y cambiar la herramienta a ASIGNADA) y devolver (actualizar asignación, herramienta y, si aplica, estudiante) modifican varias tablas y deben ejecutarse en una sola transacción con `setAutoCommit(false)`, `commit()` y `rollback()`. Hoy cada DAO abre su propia conexión, así que si falla un paso, los anteriores quedan guardados. Ver D-08 en [`../etapa_3/mejoras.md`](../etapa_3/mejoras.md).
+Las operaciones que modifican varias tablas son asignar (insertar la asignación y cambiar la herramienta a ASIGNADA) y devolver (actualizar la asignación, la herramienta y, si aplica, el estudiante). En la versión actual, cada DAO abre su propia conexión con `ConexionBD.obtenerConexion()`, por lo que cada escritura se confirma por separado.
 
 ## Service
 
@@ -183,23 +178,14 @@ try {
 
 ## Evidencias de ejecución
 
-**Datos en la base de datos** (exportados el 26-10-2026 en `SQL/gamabasis_ex1p3g4.sql`):
+**Datos registrados desde el sistema** (exportados de phpMyAdmin en `SQL/gamabasis_ex1p3g4.sql`):
 
 | Tabla | Registro | Qué demuestra |
 |---|---|---|
 | `Usuario` | `123`, Elkin Octavio Morales, Ing Sistemas, `DESHABILITADO` | Registro de estudiante y actualización de estado (inhabilitar). |
-| `Herramienta` | `12`, Multimetro, Electrica, `EN_MANTENIMIENTO`, `DuracionMaximaHoras = 0` | Registro de herramienta y cambio de estado. La duración en 0 confirma el defecto D-07. |
-| `Asignaciones` | sin registros | Todavía no hay asignaciones guardadas (ver D-01, D-02). |
+| `Herramienta` | `12`, Multimetro, Electrica, `EN_MANTENIMIENTO` | Registro de herramienta y cambio de estado. |
 
-> Pendiente: pegar la salida de consola (o capturas en `docs/etapa_2/img/`).
-
-Capturas que se necesitan:
-
-1. Registro de un estudiante y de una herramienta.
-2. Consulta por carnet/código y listado.
-3. Actualización de un estudiante o herramienta.
-4. Asignación exitosa.
-5. Asignación rechazada (estudiante inhabilitado, herramienta no disponible o límite de 3).
+**Salida de consola:**
 
 ```text
 <salida de consola>

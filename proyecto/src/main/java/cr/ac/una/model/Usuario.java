@@ -47,7 +47,7 @@ public class Usuario {
     }
     public void setCarnet(int Carnet){
         Objects.requireNonNull(Carnet, "El carnet es Obligatorio");
-        if(Carnet <= 0 || Carnet > 99999999){
+        if(Carnet <= 0 || Carnet > 999999999){
          throw new IllegalArgumentException("El carnet debe ser un número entero positivo válido de hasta 9 dígitos.");   
         }
         this.Carnet = Carnet;

@@ -29,7 +29,7 @@ public class Herramienta {
         this.Nombre = Nombre;
         this.Tipo = Tipo;
         this.EstadoHerrramienta = EstadoHerramienta;
-        this.DuracionMaximaHoras = this.DuracionMaximaHoras;
+        this.DuracionMaximaHoras = DuracionMaximaHoras;
     }
 
     public int getCodigo() {
