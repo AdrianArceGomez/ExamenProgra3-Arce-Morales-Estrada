@@ -5,11 +5,13 @@
 package cr.ac.una.controller;
 
 import cr.ac.una.exception.ValidacionException;
+import cr.ac.una.exception.AsignacionVencidaException;
 import cr.ac.una.model.CondicionDevolucion;
 import cr.ac.una.service.AsignacionService;
 import cr.ac.una.model.Asignacion;
 import cr.ac.una.exception.ReglaNegocioException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
@@ -36,7 +38,9 @@ public class AsignacionController {
             
             asignacionService.registrarPrestamo(carnet, codigoHerramienta);
             System.out.println("Herramienta (" + codigoHerramienta + ") asignada correctamente al carnet " + carnet + ".");
-            
+          
+        } catch (AsignacionVencidaException e){
+            System.out.println("Regla de negocio violada (Tiempo Vencido): " + e.getMessage());
         } catch (ReglaNegocioException | ValidacionException e) {
         System.out.println("Regla de negocio violada" + e.getMessage());
         } catch (Exception e) {
@@ -68,4 +72,26 @@ public class AsignacionController {
             System.out.println("Error del sistema o regla de negocio violada: " + e.getMessage());
         }
     }  
+    
+    public void listarAsignacionesVencidas(){
+        
+        try {
+            List<String>  vencidos = asignacionService.obtenerAsignacionesVencidas();
+            if (vencidos == null || vencidos.isEmpty()){
+                System.out.println("No se registran asignaciones abiertas vencidas en el laboratorio.");
+                return;
+            }
+            System.out.println("\n====================================================================");
+            System.out.println("                 REPORTE: ASIGNACIONES ABIERTAS VENCIDAS             ");
+            System.out.println("====================================================================");
+            int inc = 1;
+            for (String registro : vencidos){
+                System.out.println(inc + registro);
+                inc++;
+            }
+              System.out.println("========================================================");
+        } catch (Exception e){
+            System.out.println("Error del sistema al procesar el reporte de vencimiento: " + e.getMessage());
+        }
+    }
 }

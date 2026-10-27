@@ -21,4 +21,6 @@ public interface AsignacionRepository {
     Optional<Asignacion> findActiveByHerramientaId(int codigo);
     List<Herramienta> findHerramientasByUsuarioId(int carnet);
     List<Asignacion> findHistorialByHerramientaId(int codigo);
+    boolean hasOverdueAsignacio(int carnet) throws Exception;
+    List<String> findActiveAndOverdueAsignaciones() throws Exception;
 }

@@ -200,4 +200,48 @@ public class AsignacionesDao implements AsignacionRepository {
         }
         throw new IllegalArgumentException("Condicion de devolucion desconocida: " + texto);
     }
+
+    @Override
+    public boolean hasOverdueAsignacio(int carnet) throws Exception {
+        String sql = "SELECT COUNT(*) FROM asignacion a "
+                   + "JOIN herramienta h ON a.herramienta_id = h.codigo "
+                   + "WHERE a.usuario_id = ? AND a.hora_devolucion IS NULL "
+                   + "AND TIMESTAMPDIFF(HOUR, a.hora_solicitud, NOW()) > h.duracion_maxima_horas";
+        
+        try (Connection con = conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, carnet);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<String> findActiveAndOverdueAsignaciones() throws Exception {
+        List<String> listaVencidos = new ArrayList<>();
+        String sql = "SELECT u.carnet, u.nombre AS est_nombre, h.codigo AS herr_cod, h.nombre AS herr_nombre, "
+                   + "(TIMESTAMPDIFF(HOUR, a.hora_solicitud, NOW()) - h.duracion_maxima_horas) AS horas_exceso "
+                   + "FROM asignacion a "
+                   + "JOIN usuario u ON a.usuario_id = u.carnet "
+                   + "JOIN herramienta h ON a.herramienta_id = h.codigo "
+                   + "WHERE a.hora_devolucion IS NULL "
+                   + "AND TIMESTAMPDIFF(HOUR, a.hora_solicitud, NOW()) > h.duracion_maxima_horas";
+
+        try (Connection con = conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String linea = String.format("Carnet: %d (%s) | Herramienta: %d (%s) | Exceso: %d horas",
+                        rs.getInt("carnet"), rs.getString("est_nombre"),
+                        rs.getInt("herr_cod"), rs.getString("herr_nombre"),
+                        rs.getInt("horas_exceso"));
+                listaVencidos.add(linea);
+            }
+        }
+        return listaVencidos;
+    }
 }

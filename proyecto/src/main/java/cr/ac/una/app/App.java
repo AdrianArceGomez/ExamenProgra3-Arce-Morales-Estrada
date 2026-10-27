@@ -35,6 +35,7 @@ public class App {
             System.out.println("3. Modulo: Gestion de Herramientas");
             System.out.println("4. Operacion de Negocio: Asignar Herramienta (Prestamo)");
             System.out.println("5. Operacion de Negocio: Devolver Herramienta");
+            System.out.println("6. Listar Asignaciones Abiertas Vencidas ");
             System.out.println("0. Salir de la Aplicacion");
             
             opcion = Consola.leerEntero("Seleccione una opción del menu: ");
@@ -45,6 +46,7 @@ public class App {
                 case 3 -> ejecutarMenuHerramientas();
                 case 4 -> procesarAsignacion();
                 case 5 -> procesarDevolucion();
+                case 6 -> asignacionController.listarAsignacionesVencidas();
                 case 0 -> System.out.println("\n-> Sistema cerrado correctamente. ¡Muchos exitos en la entrega!");
                 default -> System.out.println("Opcion no valida. Digite un numero entre 0 y 5.");
             }
@@ -106,14 +108,14 @@ public class App {
 
                 usuarioController.actualizarEstudiante(modificado);
             }
-            default -> System.out.println(" Sub-opción inválida.");
+            default -> System.out.println(" Sub-opcion invalida.");
         }  
     }
     
     private static void ejecutarMenuHerramientas() {
         Consola.titulo("MODULO INTERNO: GESTION DE HERRAMIENTAS");
         System.out.println("1. Registrar Nueva Herramienta en Inventario");
-        System.out.println("2. Consultar Herramienta por Código");
+        System.out.println("2. Consultar Herramienta por Codigo");
         System.out.println("3. Listar Inventario de Herramientas");
         System.out.println("4. Modificar Datos / Estado Fisico");
         int subOpcion = Consola.leerEntero("Seleccione una sub-opcion: ");
@@ -128,12 +130,12 @@ public class App {
                 herramienta.setCodigo(codigo);
                 herramienta.setNombre(nombre);
                 herramienta.setTipo(tipo);
-                herramienta.setEstadoHerrramienta("DISPONIBLE"); // Atributo real con doble 'rr'
+                herramienta.setEstadoHerrramienta("DISPONIBLE");
 
                 herramientaController.registrarHerramienta(herramienta);
             }
             case 2 -> {
-                int codigo = Consola.leerEntero("Código de la herramienta a consultar: ");
+                int codigo = Consola.leerEntero("Codigo de la herramienta a consultar: ");
                 herramientaController.consultarHerramienta(codigo);
             }
             case 3 -> {
@@ -141,8 +143,8 @@ public class App {
                 herramientaController.listarHerramientas();
             }
             case 4 -> {
-                int codigo = Consola.leerEntero("Código de la herramienta a modificar: ");
-                String nombre = Consola.leerTexto("Nuevo Nombre/Descripción: ");
+                int codigo = Consola.leerEntero("Codigo de la herramienta a modificar: ");
+                String nombre = Consola.leerTexto("Nuevo Nombre/Descripcion: ");
                 String tipo = Consola.leerTexto("Nuevo Tipo: ");
                 System.out.println("Estados válidos: DISPONIBLE, ASIGNADA, DAÑADA, EN_MANTENIMIENTO");
                 String estadoStr = Consola.leerTexto("Digite el nuevo estado: ");
@@ -155,14 +157,14 @@ public class App {
 
                 herramientaController.actualizarHerramienta(modificada);
             }
-            default -> System.out.println("Sub-opción inválida.");
+            default -> System.out.println("Sub-opcion invalida.");
         }
     }
     
     private static void procesarAsignacion() {
-        Consola.titulo("TRANSACCIÓN DE NEGOCIO: ASIGNACIÓN DE HERRAMIENTA");
+        Consola.titulo("TRANSACCION DE NEGOCIO: ASIGNACION DE HERRAMIENTA");
         int carnet = Consola.leerEntero("Ingrese el Carnet del Estudiante solicitante: ");
-        int codigo = Consola.leerEntero("Ingrese el Código de la Herramienta a retirar: ");
+        int codigo = Consola.leerEntero("Ingrese el Codigo de la Herramienta a retirar: ");
 
         System.out.println("\nEnviando datos de asignación al controlador...");
         try {
@@ -173,11 +175,11 @@ public class App {
     }
     
     private static void procesarDevolucion() {
-        Consola.titulo("TRANSACCIÓN DE NEGOCIO: RETORNO / DEVOLUCIÓN");
-        int codigo = Consola.leerEntero("Ingrese el Código de la Herramienta que se devuelve: ");
+        Consola.titulo("TRANSACCION DE NEGOCIO: RETORNO / DEVOLUCION");
+        int codigo = Consola.leerEntero("Ingrese el Codigo de la Herramienta que se devuelve: ");
         
         System.out.println("Condiciones válidas del sistema: BUENA / DAÑADA");
-        String condicion = Consola.leerTexto("Digite la condición física de entrega: ");
+        String condicion = Consola.leerTexto("Digite la condiciOn fisica de entrega: ");
 
         System.out.println("\nEnviando datos de retorno al controlador...");
         asignacionController.putDevolver(codigo, condicion); 

@@ -21,6 +21,7 @@ import Dao.HerramientaDao;
 import Dao.UsuarioDao;
 import cr.ac.una.exception.ReglaNegocioException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 
@@ -56,6 +57,10 @@ public class AsignacionService {
   
     //valida la disponibilidad del prestamo y cambia el estado de la herramienta
     public void registrarPrestamo(int carnet, int codigoHerramienta) throws Exception{
+        if (asignacionRepository.hasOverdueAsignacio(carnet)) {
+            throw new cr.ac.una.exception.AsignacionVencidaException(
+                "Operación rechazada: El estudiante posee herramientas con el tiempo de asignación máximo vencido.");
+        }
         validarDisponibilidad(carnet, codigoHerramienta);
         validarLimiteHerramientas(carnet);
         
@@ -222,6 +227,8 @@ public void aplicarSancionPorDanio(
         usuarioRepository.save(usuario);
     }
 }
-
+    public List<String> obtenerAsignacionesVencidas() throws Exception {
+        return asignacionRepository.findActiveAndOverdueAsignaciones();
+    }
   
 }
