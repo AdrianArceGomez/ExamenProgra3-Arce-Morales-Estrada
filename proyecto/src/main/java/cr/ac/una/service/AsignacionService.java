@@ -68,6 +68,7 @@ public class AsignacionService {
         validarAsignacion(nuevaAsignacion);
         Herramienta herramienta = herramientaRepository.findById(codigoHerramienta).get();
         herramienta.setEstadoHerrramienta("ASIGNADA");
+        herramientaRepository.save(herramienta);
         
         asignacionRepository.save(nuevaAsignacion);
     }
@@ -82,8 +83,8 @@ public class AsignacionService {
         validarAsignacion(asignacion);
     
         Herramienta herramienta = herramientaRepository.findById(codigoHerramienta).get();
-        String condicionDevolucion = condicion.name().toUpperCase().trim();
-        herramienta.setEstadoHerrramienta(condicionDevolucion);
+        herramienta.setEstadoHerrramienta(
+        condicion == CondicionDevolucion.DAÑADA ? "DANADA" : "DISPONIBLE");
         herramientaRepository.save(herramienta);
         asignacionRepository.save(asignacion);
     }
@@ -139,14 +140,14 @@ public void validarDisponibilidad(int carnet, int codigo)
             .orElseThrow(() -> new ReglaNegocioException(
                     "La herramienta no existe"));
 
-    if (!UsuarioHabilitado.HABILITADO.getTipo()
+    if (!UsuarioHabilitado.HABILITADO.name()
             .equals(usuario.getEstado())) {
 
         throw new ReglaNegocioException(
                 "El usuario no esta habilitado para solicitar herramientas");
     }
 
-    if (!CondicionHerramienta.DISPONIBLE.getEstado()
+    if (!CondicionHerramienta.DISPONIBLE.name()
             .equals(herramienta.getEstadoHerrramienta())) {
 
         throw new ReglaNegocioException(
@@ -214,7 +215,7 @@ public void aplicarSancionPorDanio(
                 "La condicion de devolucion es obligatoria");
     }
 
-    if (condicion == CondicionDevolucion.DAÑADO) {
+    if (condicion == CondicionDevolucion.DAÑADA) {
 
         Usuario usuario = usuarioRepository
                 .findById(asignacion.getUsuarioId())
@@ -222,7 +223,7 @@ public void aplicarSancionPorDanio(
                         "El usuario no existe"));
 
         usuario.setEstado(
-                UsuarioHabilitado.DESHABILITADO.getTipo());
+                UsuarioHabilitado.DESHABILITADO.name());
 
         usuarioRepository.save(usuario);
     }
